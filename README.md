@@ -7,17 +7,17 @@ just paste them into your:
 
 manga repo 
 ```
-https://MiraiEnoki.github.io/anymex_extensions/index.json
+https://raw.githubusercontent.com/MiraiEnoki/anymex_extensions/refs/heads/main/index.json
 ```
 
 anime repo 
 ```
-https://MiraiEnoki.github.io/anymex_extensions/anime_index.json
+https://raw.githubusercontent.com/MiraiEnoki/anymex_extensions/refs/heads/main/anime_index.json
 ```
 
 novel repo 
 ```
-https://MiraiEnoki.github.io/anymex_extensions/novel_index.json
+https://raw.githubusercontent.com/MiraiEnoki/anymex_extensions/refs/heads/main/novel_index.json
 ```
 
 # Contributing
