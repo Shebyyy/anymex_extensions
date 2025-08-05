@@ -14,19 +14,12 @@ jobs:
       - name: Generate
         run: |
           dart run source_generator.dart
-      - name: Commit and Push Changes
-        env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git checkout main
-          git add index.json
-          git add anime_index.json
-          git add novel_index.json
-          if git diff --cached --quiet; then
-            echo "No changes detected, skipping commit."
-          else
-            git commit -m "Update extensions"
-            git push https://${{ secrets.PAT_TOKEN }}@github.com/MiraiEnoki/anymex_extensions.git main
-          fi
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          commit-message: "Update extensions"
+          title: "Automated JSON index update"
+          body: "Generated updated index files"
+          branch: auto-update-branch
+          base: main
