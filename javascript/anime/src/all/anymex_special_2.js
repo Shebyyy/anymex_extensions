@@ -6,7 +6,7 @@ const mangayomiSources = [{
     "iconUrl": "https://raw.githubusercontent.com/RyanYuuki/AnymeX/main/assets/images/logo.png",
     "typeSource": "multi",
     "itemType": 1,
-    "version": "0.0.4",
+    "version": "0.0.5",
     "pkgPath": "anime/src/all/anymex_special_2.js"
 }];
 
@@ -117,7 +117,7 @@ class DefaultExtension extends MProvider {
                 for (let ep = 1; ep <= episodeCount; ep++) {
                     chapters.push({
                         name: `S${season.season_number} · E${ep}`,
-                        url: `https://oc.autoembed.cc/tv/${tmdbId}/${season.season_number}/${ep}`,
+                        url: `https://ola.autoembed.cc/tv/${tmdbId}/${season.season_number}/${ep}`,
                     });
                 }
             }
