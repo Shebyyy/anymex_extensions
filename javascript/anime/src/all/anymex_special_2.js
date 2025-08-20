@@ -1,12 +1,12 @@
 const mangayomiSources = [{
     "name": "Anymex Special #2",
     "lang": "All",
-    "baseUrl": "https://moviebox.ng/",
+    "baseUrl": "https://fmoviesunblocked.net/",
     "apiUrl": "",
     "iconUrl": "https://raw.githubusercontent.com/RyanYuuki/AnymeX/main/assets/images/logo.png",
     "typeSource": "multi",
     "itemType": 1,
-    "version": "0.0.5",
+    "version": "0.0.6",
     "pkgPath": "anime/src/all/anymex_special_2.js"
 }];
 
@@ -157,8 +157,8 @@ class DefaultExtension extends MProvider {
                         originalUrl: stream.stream_url,
                         subtitles: [],
                         headers: {
-                            Referer: "https://moviebox.ng/",
-                            Origin: "https://moviebox.ng",
+                            Referer: "https://fmoviesunblocked.net/",
+                            Origin: "https://fmoviesunblocked.net",
                         },
                     }));
                 }
@@ -173,8 +173,8 @@ class DefaultExtension extends MProvider {
                             label: sub.lanName,
                         })),
                         headers: {
-                            Referer: "https://moviebox.ng/",
-                            Origin: "https://moviebox.ng",
+                            Referer: "https://fmoviesunblocked.net/",
+                            Origin: "https://fmoviesunblocked.net",
                         },
                     }));
                 }
