@@ -36,7 +36,7 @@ class DefaultExtension extends MProvider {
                 link: JSON.stringify({
                     id: e.id,
                     type,
-                    url: `https://tmdb.hexa.watch/api/tmdb/${type}/${e.id}`,
+                    url: `https://themoviedb.hexa.watch/api/tmdb/${type}/${e.id}`,
                 }),
                 imageUrl:
                     "https://image.tmdb.org/t/p/w500" +
@@ -53,7 +53,7 @@ class DefaultExtension extends MProvider {
 
     async requestSearch(query, isMovie) {
         const type = isMovie ? "movie" : "tv";
-        const url = `https://tmdb.hexa.watch/api/tmdb/search/${type}?language=en-US&query=${encodeURIComponent(
+        const url = `https://themoviedb.hexa.watch/api/tmdb/search/${type}?language=en-US&query=${encodeURIComponent(
             query
         )}&page=1&include_adult=false`;
 
