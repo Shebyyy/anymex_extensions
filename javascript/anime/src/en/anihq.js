@@ -7,7 +7,7 @@ const mangayomiSources = [{
     "iconUrl": "https://www.google.com/s2/favicons?sz=64&domain=anihq.to",
     "typeSource": "single",
     "itemType": 1,
-    "version": "5.0.3",
+    "version": "5.1.0",
     "pkgPath": "anime/src/en/anihq.js"
 }];
 
@@ -16,9 +16,15 @@ class DefaultExtension extends MProvider {
         super();
         this.client = new Client();
         // It's assumed that a parsing library like 'cheerio' is available globally.
-        // If not, this line will need to be adjusted based on your environment.
-        // For example: this.cheerio = require('cheerio');
         this.cheerio = globalThis.cheerio; 
+    }
+
+    // Add headers to mimic a real browser and avoid being blocked
+    getHeaders(url) {
+        return {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36',
+            'Referer': this.baseUrl
+        };
     }
 
     getPreferredUrl() {
@@ -28,7 +34,7 @@ class DefaultExtension extends MProvider {
     // Helper to fetch and parse HTML
     async fetchHtml(url) {
         try {
-            const response = await this.client.get(url);
+            const response = await this.client.get(url, this.getHeaders(url));
             return response.body;
         } catch (error) {
             console.error(`Failed to fetch HTML from ${url}:`, error);
@@ -39,12 +45,17 @@ class DefaultExtension extends MProvider {
     // Helper to parse list items from search results, popular page, etc.
     parseSearchItems($) {
         const items = [];
-        $('.film_list-wrap .flw-item').each((i, element) => {
+        // CORRECTED: The selector for the item and its name/link has been updated.
+        $('.flw-item').each((i, element) => {
             const item = $(element);
-            const name = item.find('.film-detail .film-name a').text().trim();
-            const link = this.baseUrl + item.find('.film-detail .film-name a').attr('href');
-            const imageUrl = item.find('.film-poster img').attr('data-src');
-            items.push({ name, link, imageUrl });
+            const nameElement = item.find('.dynamic-name');
+            const name = nameElement.text().trim();
+            const link = this.baseUrl + nameElement.attr('href');
+            const imageUrl = item.find('.film-poster-img').attr('data-src');
+            
+            if (name && link) {
+                items.push({ name, link, imageUrl });
+            }
         });
         return items;
     }
@@ -116,7 +127,7 @@ class DefaultExtension extends MProvider {
         const $ = this.cheerio.load(html);
         const name = $('.heading-name').text().trim();
         const description = $('.description').text().trim();
-        const imageUrl = $('.anime-poster .film-poster img').attr('src');
+        const imageUrl = $('.anime-poster .film-poster-img').attr('src');
 
         // Get anime ID for fetching episodes
         const animeId = $('.block_area-seasons').attr('data-id');
@@ -171,7 +182,7 @@ class DefaultExtension extends MProvider {
             try {
                 // Get the actual streaming link for the server
                 const linkDataUrl = `${this.baseUrl}/ajax/get-link/${linkId}?id=${episodeId}`;
-                const linkDataResponse = await this.client.get(linkDataUrl);
+                const linkDataResponse = await this.client.get(linkDataUrl, this.getHeaders(linkDataUrl));
                 const linkData = JSON.parse(linkDataResponse.body);
 
                 if (!linkData || !linkData.link) continue;
