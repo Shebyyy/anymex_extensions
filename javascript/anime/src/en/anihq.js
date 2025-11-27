@@ -7,16 +7,18 @@ const mangayomiSources = [{
     "iconUrl": "https://www.google.com/s2/favicons?sz=64&domain=anihq.to",
     "typeSource": "single",
     "itemType": 1,
-    "version": "5.0.2",
+    "version": "5.0.3",
     "pkgPath": "anime/src/en/anihq.js"
 }];
 
-class AniHqExtension extends MProvider {
+class DefaultExtension extends MProvider {
     constructor() {
         super();
         this.client = new Client();
-        // Assuming Cheerio is available in the environment for HTML parsing.
-        this.cheerio = require('cheerio');
+        // It's assumed that a parsing library like 'cheerio' is available globally.
+        // If not, this line will need to be adjusted based on your environment.
+        // For example: this.cheerio = require('cheerio');
+        this.cheerio = globalThis.cheerio; 
     }
 
     getPreferredUrl() {
