@@ -1,3 +1,20 @@
+const mangayomiSources = [
+  {
+    "name": "Kuudere",
+    "lang": "en",
+    "id": 209614033, // Use a unique ID
+    "baseUrl": "https://kuudere.to",
+    "apiUrl": "",
+    "iconUrl":
+      "https://www.google.com/s2/favicons?sz=256&domain=https://kuudere.to",
+    "typeSource": "single",
+    "itemType": 1, // 1 for Anime, 0 for Manga
+    "version": "1.0.0",
+    "pkgPath": "anime/src/en/kuudere.js"
+  }
+  // ... other sources
+];
+
 // Authors: - Adapted for Kuudere by AI
 
 class DefaultExtension extends MProvider {
