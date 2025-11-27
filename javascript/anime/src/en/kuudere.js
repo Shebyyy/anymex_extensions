@@ -1,17 +1,16 @@
 const mangayomiSources = [
-{
-  "name": "Kuudere",
-  "lang": "en",
-  "id": 209614033,
-  "baseUrl": "https://kuudere.to",
-  "apiUrl": "",
-  "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://kuudere.to",
-  "typeSource": "single",
-  "itemType": 1,
-  "version": "1.0.0",
-  "pkgPath": "anime/src/en/kuudere.js"
-}
-  // ... other sources
+  {
+    "name": "Kuudere",
+    "lang": "en",
+    "id": 209614033,
+    "baseUrl": "https://kuudere.to",
+    "apiUrl": "",
+    "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://kuudere.to",
+    "typeSource": "single",
+    "itemType": 1,
+    "version": "1.0.0",
+    "pkgPath": "anime/src/en/kuudere.js"
+  }
 ];
 
 // Authors: - Adapted for Kuudere by AI
