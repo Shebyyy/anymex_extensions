@@ -1,19 +1,19 @@
 const mangayomiSources = [
   {
-    "name": "Kuudere",
-    "lang": "en",
-    "id": 209614033,
-    "baseUrl": "https://kuudere.to",
-    "apiUrl": "",
-    "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://kuudere.to",
-    "typeSource": "single",
-    "itemType": 1,
-    "version": "1.1.0",
-    "pkgPath": "anime/src/en/kuudere.js"
+  "name": "Kuudere",
+  "lang": "en",
+  "id": 209614033,
+  "baseUrl": "https://kuudere.to",
+  "apiUrl": "",
+  "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://kuudere.to",
+  "typeSource": "single",
+  "itemType": 1,
+  "version": "1.2.0",
+  "pkgPath": "anime/src/en/kuudere.js"
   }
 ];
 
-// Authors: - Adapted for Kuudere by AI
+// Authors: - Shebyyy
 
 class DefaultExtension extends MProvider {
   constructor() {
@@ -24,7 +24,6 @@ class DefaultExtension extends MProvider {
 
   getHeaders(url) {
     return {
-      // The User-Agent is crucial to avoid being blocked
       "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
       Referer: this.source.baseUrl,
     };
@@ -48,13 +47,11 @@ class DefaultExtension extends MProvider {
   // --- List Parsing Functions (Popular, Latest, Search) ---
 
   parseListItems(body) {
-    // This selector targets the items on the homepage and search results
     const items = body.select("div.last_episodes > div.item");
     console.log(`Found ${items.length} items on the page.`);
     const list = [];
     for (const item of items) {
       const linkElement = item.selectFirst("a");
-      // Use optional chaining (?.) to prevent errors if an element is not found
       const name = item.selectFirst("p.name")?.text.trim();
       const imageUrl = item.selectFirst("div.img img")?.getSrc;
       const link = linkElement?.getHref;
@@ -78,7 +75,6 @@ class DefaultExtension extends MProvider {
   }
 
   async getLatestUpdates(page) {
-    // The homepage also contains the latest episodes.
     return await this.getPopular(page);
   }
 
@@ -107,7 +103,6 @@ class DefaultExtension extends MProvider {
             if (text.toLowerCase().includes("ongoing")) status = 0;
             else if (text.toLowerCase().includes("completed")) status = 1;
         } else if (text.toLowerCase().startsWith("genre:")) {
-            // Extract genre text and split by comma
             const genreText = item.selectFirst("a")?.text || text.replace("Genre:", "").trim();
             if (genreText) genre.push(...genreText.split(',').map(g => g.trim()));
         }
