@@ -1,19 +1,19 @@
 const mangayomiSources = [
   {
-  "name": "Kuudere",
-  "lang": "en",
-  "id": 209614033,
-  "baseUrl": "https://kuudere.to",
-  "apiUrl": "",
-  "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://kuudere.to",
-  "typeSource": "single",
-  "itemType": 1,
-  "version": "1.2.0",
-  "pkgPath": "anime/src/en/kuudere.js"
+    "name": "Kuudere",
+    "lang": "en",
+    "id": 209614033,
+    "baseUrl": "https://kuudere.to",
+    "apiUrl": "",
+    "iconUrl": "https://www.google.com/s2/favicons?sz=256&domain=https://kuudere.to",
+    "typeSource": "single",
+    "itemType": 1,
+    "version": "2.0.0",
+    "pkgPath": "anime/src/en/kuudere.js"
   }
 ];
 
-// Authors: - Shebyyy
+// Authors: - Adapted for Kuudere.to using the AnymeX Special #1 template
 
 class DefaultExtension extends MProvider {
   constructor() {
@@ -22,6 +22,7 @@ class DefaultExtension extends MProvider {
     this.preferenceSourceMenu = "Kuudere";
   }
 
+  // Required headers to mimic a browser and avoid being blocked
   getHeaders(url) {
     return {
       "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
@@ -29,10 +30,12 @@ class DefaultExtension extends MProvider {
     };
   }
 
+  // Helper to get user preferences
   getPreference(key) {
     return parseInt(new SharedPreferences().get(`${this.preferenceSourceMenu}:${key}`));
   }
 
+  // Helper function to make GET requests and return text
   async requestText(slug) {
     const url = `${this.source.baseUrl}${slug}`;
     console.log(`Requesting URL: ${url}`);
@@ -40,28 +43,12 @@ class DefaultExtension extends MProvider {
     return res.body;
   }
 
+  // Helper function to parse HTML from a request
   async request(slug) {
     return new Document(await this.requestText(slug));
   }
 
-  // --- List Parsing Functions (Popular, Latest, Search) ---
-
-  parseListItems(body) {
-    const items = body.select("div.last_episodes > div.item");
-    console.log(`Found ${items.length} items on the page.`);
-    const list = [];
-    for (const item of items) {
-      const linkElement = item.selectFirst("a");
-      const name = item.selectFirst("p.name")?.text.trim();
-      const imageUrl = item.selectFirst("div.img img")?.getSrc;
-      const link = linkElement?.getHref;
-
-      if (name && link) {
-        list.push({ name, imageUrl, link });
-      }
-    }
-    return list;
-  }
+  // --- Main Content Fetching Functions ---
 
   async getPopular(page) {
     const slug = page > 1 ? `/?page=${page}` : "/";
@@ -71,10 +58,11 @@ class DefaultExtension extends MProvider {
   }
 
   get supportsLatest() {
-    return true;
+    return true; // The site has a "Latest Episodes" section
   }
 
   async getLatestUpdates(page) {
+    // For kuudere.to, the latest updates are on the same page as the popular anime.
     return await this.getPopular(page);
   }
 
@@ -85,7 +73,7 @@ class DefaultExtension extends MProvider {
     return { list, hasNextPage: list.length > 0 };
   }
 
-  // --- Detail Page Parsing ---
+  // --- Detail and Video Parsing ---
 
   async getDetail(url) {
     const body = await this.request(url);
@@ -121,12 +109,11 @@ class DefaultExtension extends MProvider {
     return { description, status, genre: genre.join(", "), chapters, link: url };
   }
 
-  // --- Video Stream Extraction ---
-
   async getVideoList(url) {
     const streams = [];
     const pageHtml = await this.requestText(url);
 
+    // The site stores server info in a JavaScript variable `ajax_player`
     const ajaxPlayerMatch = pageHtml.match(/var ajax_player = ({[\s\S]*?});/);
     if (!ajaxPlayerMatch || !ajaxPlayerMatch[1]) {
       console.error("Could not find ajax_player variable.");
@@ -176,8 +163,27 @@ class DefaultExtension extends MProvider {
     return streams;
   }
 
-  // --- User Preferences ---
+  // --- Helper Functions and Preferences ---
 
+  // Helper to parse items from a list page (homepage, search, etc.)
+  parseListItems(body) {
+    const items = body.select("div.last_episodes > div.item");
+    console.log(`Found ${items.length} items on the page.`);
+    const list = [];
+    for (const item of items) {
+      const linkElement = item.selectFirst("a");
+      const name = item.selectFirst("p.name")?.text.trim();
+      const imageUrl = item.selectFirst("div.img img")?.getSrc;
+      const link = linkElement?.getHref;
+
+      if (name && link) {
+        list.push({ name, imageUrl, link });
+      }
+    }
+    return list;
+  }
+
+  // Define user-configurable preferences for this source
   getSourcePreferences() {
     return [
       {
@@ -191,5 +197,26 @@ class DefaultExtension extends MProvider {
         },
       },
     ];
+  }
+
+  // --- Unused but required functions ---
+
+  // For novel html content
+  async getHtmlContent(url) {
+    throw new Error("getHtmlContent not implemented");
+  }
+
+  // Clean html up for reader
+  async cleanHtmlContent(html) {
+    throw new Error("cleanHtmlContent not implemented");
+  }
+
+  // For manga chapter pages
+  async getPageList(url) {
+    throw new Error("getPageList not implemented");
+  }
+
+  getFilterList() {
+    throw new Error("getFilterList not implemented");
   }
 }
