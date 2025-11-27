@@ -6,7 +6,7 @@ const mangayomiSources = [{
     "apiUrl": "",
     "iconUrl": "https://www.google.com/s2/favicons?sz=64&domain=anihq.to",
     "typeSource": "single",
-    "itemType": 1, // 1 for anime
+    "itemType": 1,
     "version": "5.0.2",
     "pkgPath": "anime/src/en/anihq.js"
 }];
